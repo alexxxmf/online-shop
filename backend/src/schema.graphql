@@ -13,4 +13,5 @@ type Query {
   hi: String
   items: [Item]!
   item(where: ItemWhereUniqueInput!): Item
+  itemsConnection(where: ItemWhereInput): ItemConnection!
 }

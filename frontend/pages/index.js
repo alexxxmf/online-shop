@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Items from '../components/Items';
 // Next.js takes care of the imports at page level for react library so
 // react is implicitly accesible
 
@@ -7,10 +7,7 @@ import Link from 'next/link';
 // between opages
 const Home = (props) => (
     <div>
-        <p>Heyyy!</p>
-        <Link href="/sell">
-            <a>Blabla</a>
-        </Link>
+        <Items page={2} />
     </div>
 )
 

@@ -3,6 +3,10 @@
 # ^^^^ this is the syntax for imports in graphql/prisma
 # this way we can avoid duplicating things like Item type definition
 
+type SuccessMessage {
+  message: String
+}
+
 type Mutation {
   hi: String
   createItem(title: String, description: String, price: Int, image: String, largeImage: String): Item!
@@ -10,6 +14,7 @@ type Mutation {
   deleteItem(id: ID!): Item
   signup(email: String!, password: String!, name: String!): User!
   signin(email: String!, password: String!): User!
+  signout: SuccessMessage
 }
 
 type Query {

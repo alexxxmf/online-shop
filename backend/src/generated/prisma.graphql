@@ -274,6 +274,8 @@ type User {
   email: String!
   password: String!
   permissions: [Permission!]!
+  resetToken: String
+  resetTokenExpiry: Float
 }
 
 type UserConnection {
@@ -287,6 +289,8 @@ input UserCreateInput {
   email: String!
   password: String!
   permissions: UserCreatepermissionsInput
+  resetToken: String
+  resetTokenExpiry: Float
 }
 
 input UserCreatepermissionsInput {
@@ -307,6 +311,10 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
+  resetToken_ASC
+  resetToken_DESC
+  resetTokenExpiry_ASC
+  resetTokenExpiry_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -319,6 +327,8 @@ type UserPreviousValues {
   email: String!
   password: String!
   permissions: [Permission!]!
+  resetToken: String
+  resetTokenExpiry: Float
 }
 
 type UserSubscriptionPayload {
@@ -344,6 +354,8 @@ input UserUpdateInput {
   email: String
   password: String
   permissions: UserUpdatepermissionsInput
+  resetToken: String
+  resetTokenExpiry: Float
 }
 
 input UserUpdateManyMutationInput {
@@ -351,6 +363,8 @@ input UserUpdateManyMutationInput {
   email: String
   password: String
   permissions: UserUpdatepermissionsInput
+  resetToken: String
+  resetTokenExpiry: Float
 }
 
 input UserUpdatepermissionsInput {
@@ -414,6 +428,28 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  resetToken: String
+  resetToken_not: String
+  resetToken_in: [String!]
+  resetToken_not_in: [String!]
+  resetToken_lt: String
+  resetToken_lte: String
+  resetToken_gt: String
+  resetToken_gte: String
+  resetToken_contains: String
+  resetToken_not_contains: String
+  resetToken_starts_with: String
+  resetToken_not_starts_with: String
+  resetToken_ends_with: String
+  resetToken_not_ends_with: String
+  resetTokenExpiry: Float
+  resetTokenExpiry_not: Float
+  resetTokenExpiry_in: [Float!]
+  resetTokenExpiry_not_in: [Float!]
+  resetTokenExpiry_lt: Float
+  resetTokenExpiry_lte: Float
+  resetTokenExpiry_gt: Float
+  resetTokenExpiry_gte: Float
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

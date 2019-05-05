@@ -21,7 +21,7 @@ type Item {
   price: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
-  user: User!
+  user: User
 }
 
 type ItemConnection {
@@ -36,7 +36,7 @@ input ItemCreateInput {
   image: String
   largeImage: String
   price: Int!
-  user: UserCreateOneInput!
+  user: UserCreateOneInput
 }
 
 type ItemEdge {
@@ -98,7 +98,7 @@ input ItemUpdateInput {
   image: String
   largeImage: String
   price: Int
-  user: UserUpdateOneRequiredInput
+  user: UserUpdateOneInput
 }
 
 input ItemUpdateManyMutationInput {
@@ -385,10 +385,12 @@ input UserUpdateManyMutationInput {
   resetTokenExpiry: Float
 }
 
-input UserUpdateOneRequiredInput {
+input UserUpdateOneInput {
   create: UserCreateInput
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 

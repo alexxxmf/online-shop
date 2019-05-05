@@ -171,7 +171,7 @@ const Mutation = {
         });
         // 8. return the new user
         return updatedUser;
-      },
+      }
       
 }
 

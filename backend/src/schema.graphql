@@ -7,6 +7,15 @@ type SuccessMessage {
   message: String
 }
 
+enum Permission {
+  ADMIN
+  USER
+  ITEMCREATE
+  ITEMUPDATE
+  ITEMDELETE
+  PERMISSIONUPDATE
+}
+
 type Mutation {
   hi: String
   createItem(title: String, description: String, price: Int, image: String, largeImage: String): Item!
@@ -25,6 +34,7 @@ type Query {
   item(where: ItemWhereUniqueInput!): Item
   itemsConnection(where: ItemWhereInput): ItemConnection!
   me: User
+  users: [User]!
 }
 
 type User{

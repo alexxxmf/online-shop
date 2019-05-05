@@ -1,4 +1,5 @@
 const { forwardTo } = require('prisma-binding');
+const { hasPermission } = require('../utils');
 /* https://www.prisma.io/docs/1.15/use-prisma-api/prisma-bindings/forwarding-to-prisma-onq1/
 when one of the resolvers in yoga doesn't add any functionaly extra in comparison with the prisma
 counterpart, we can use forwardTo
@@ -21,7 +22,16 @@ const Query = {
         return ctx.db.query.user({
             where: { id: ctx.request.userId },
         }, info);
-    }
+    },
+    async users(parent, args, ctx, info) {
+        // does user have the permissions to query?
+        if(!ctx.request.userId) {
+            throw new Error('You must be logged in')
+        }
+        // if they do, query all users
+        hasPermission(ctx.request.user, ['ADMIN', 'PERMISSIONUPDATE'])
+        return ctx.db.query.users({}, info);
+    },
 }
 
 module.exports = Query;

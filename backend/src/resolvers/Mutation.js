@@ -6,8 +6,20 @@ const { transport, makeNiceEmail } = require('../mail')
 
 const Mutation = {
     async createItem(parent, args, ctx, info) {
+        if(!ctx.request.userId) {
+            throw new Error('You must be logged in to do that!')
+        }
+
         const item = await ctx.db.mutation.createItem({
-            data: { ...args }
+            data: {
+                //this is the way to create relationships between objects
+                user: {
+                    connect: {
+                        id: ctx.request.userId
+                    }
+                },
+                ...args
+            }
         }, info); 
         return item;
     },
@@ -29,6 +41,7 @@ const Mutation = {
     async deleteItem(parent, args, ctx, info) {
         const where = { id: args.id };
         // 1. find the item
+        console.log(where)
         const item = await ctx.db.query.item({ where }, `{ id title user { id }}`);
         // 2. Check if they own that item, or have the permissions
         const ownsItem = item.user.id === ctx.request.userId;

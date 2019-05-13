@@ -34,7 +34,9 @@ const ItemsList = styled.div`
 
 class Items extends Component {
   render() {
+    console.log("===============")
     console.log(this.props)
+    console.log("===============")
     return (
       <Center>
         <Pagination page={parseFloat(this.props.query.page) || 1}/>

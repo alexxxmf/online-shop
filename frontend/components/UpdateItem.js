@@ -69,7 +69,7 @@ class UpdateItem extends Component {
         >
 
             {({ data, loading }) => {
-                console.log("AHHHHHH=============")
+
                 if(loading) return <p>Loading</p>
                 if(!data.item) return <p>No Item Found</p>
                 return(

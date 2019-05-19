@@ -23,15 +23,15 @@ const CREATE_ORDER_MUTATION = gql`
 `;
 
 class GetMoney extends React.Component {
-    onToken = (response, createOrder) => {
-        console.log(response)
-        createOrder({
+    onToken = async (response, createOrder) => {
+        const order = await createOrder({
             variables: {
               token: response.id,
             },
           }).catch(error => {
             alert(error.message);
         });
+        console.log(order)
     }
 
     render() {
@@ -46,7 +46,7 @@ class GetMoney extends React.Component {
                             <StripeCheckout
                                 amount={calcTotalPrice(me.cart)}
                                 name="online-shop"
-                                image={me.cart[0].item && me.cart[0].item.image}
+                                image={me.cart.length && me.cart[0].item && me.cart[0].item.image}
                                 stripeKey="pk_test_RfJyIyeHfpMFVVbrkJqaP4dN"
                                 currency="USD"
                                 email={me.email}

@@ -24,6 +24,7 @@ const CREATE_ORDER_MUTATION = gql`
 
 class GetMoney extends React.Component {
     onToken = async (response, createOrder) => {
+        NProgress.start();
         const order = await createOrder({
             variables: {
               token: response.id,
@@ -32,7 +33,11 @@ class GetMoney extends React.Component {
             alert(error.message);
         });
         console.log(order)
-    }
+        Router.push({
+            pathname: '/order',
+            query: { id: order.data.createOrder.id }
+        });
+    };
 
     render() {
         return (

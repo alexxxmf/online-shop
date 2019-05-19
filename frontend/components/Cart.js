@@ -10,6 +10,7 @@ import SickButton from './styles/SickButton';
 import CartItem from './CartItem';
 import calcTotalPrice from '../lib/calcTotalPrice';
 import formatMoney from '../lib/formatMoney';
+import GetMoney from './GetMoney';
 
 // more on @client here: https://www.apollographql.com/docs/react/essentials/local-state
 // basically it's a way to say, hey apollo don't bother looking in the backend, this is a local state piece
@@ -51,7 +52,9 @@ const Composed = adopt({
             <ul>{me.cart.map(cartItem => <CartItem key={cartItem.id} cartItem={cartItem} />)}</ul>
             <footer>
               <p>{formatMoney(calcTotalPrice(me.cart))}</p>
-              <SickButton>Checkout</SickButton>
+              <GetMoney>
+                <SickButton>Checkout</SickButton>
+              </GetMoney>
             </footer>
           </CartStyles>
         );

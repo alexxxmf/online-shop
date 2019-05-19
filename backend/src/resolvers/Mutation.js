@@ -4,6 +4,7 @@ const { randomBytes } = require('crypto');
 const { promisify } = require('util');
 const { transport, makeNiceEmail } = require('../mail')
 const { hasPermission } = require('../utils');
+const stripe = require('../stripe');
 
 const Mutation = {
     async createItem(parent, args, ctx, info) {
@@ -248,8 +249,43 @@ const Mutation = {
             },
         }, info)
 
+      },
+      async createOrder(parent, args, ctx, info) {
+        // Query the user and make sure they are signed in
+        const { userId } = ctx.request;
+        if (!userId) throw new Error('You must be signed in to complete this order.');
+        const user = await ctx.db.query.user(
+            { where: { id: userId } },
+            `{
+                id
+                name
+                email
+                cart {
+                    id
+                    quantity
+                    item {
+                        title
+                        price
+                        id
+                        description
+                        image
+                    }
+                }
+            }`
+        )
+        // Recalculate the total for the price. We shouldn't trust what comes from
+        // client, could be easily modified by sneaky users.
+        const amount = user.cart.reduce(
+            (tally, cartItem) => tally + cartItem.item.price * cartItem.quantity, 
+            0
+        );
+        // Create the stripe charge
+        const charge = await stripe.charges.create({
+            amount,
+            currency: 'USD',
+            source: args.token
+        })
       }
-      
 }
 
 module.exports = Mutation;

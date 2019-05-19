@@ -36,3 +36,24 @@ type CartItem {
   item: Item
   user: User!
 }
+
+# we need somethign quite similar to item. At some point item could be removed from db but we
+# don't want this to affect the past orders so duplication is innevitable
+type OrderItem {
+  id: ID! @id
+  title: String!
+  description: String!
+  image: String
+  largeImage: String
+  price: Int!
+  user: User
+  quantity: Int! @default(value: 1)
+}
+
+type Order {
+  id: ID! @id
+  items: [OrderItem!]!
+  total: Int!
+  user: User!
+  charge: String!
+}

@@ -984,6 +984,7 @@ var Nav = function Nav() {
     var data = _ref.data;
     var me = data ? data.me : null;
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_styles_NavStyles__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      "data-test": "nav",
       __source: {
         fileName: _jsxFileName,
         lineNumber: 14

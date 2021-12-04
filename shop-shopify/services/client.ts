@@ -7,7 +7,7 @@ import {
 } from "@apollo/client";
 
 const httpLink = new HttpLink({
-  uri: `https://${process.env.SHOPIFY_STORE_DOMAIN}/api/2021-07/graphql.json`,
+  uri: `https://${process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN}/api/2021-07/graphql.json`,
   // credentials: "include",
 });
 
@@ -16,7 +16,7 @@ const accessMiddleware = new ApolloLink((operation, forward) => {
     headers: {
       ...headers,
       "X-Shopify-Storefront-Access-Token":
-        process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN,
+        process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN,
     },
   }));
 

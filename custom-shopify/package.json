@@ -6,11 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "codegen:schema-download": "eval $(grep '^SHOPIFY_STORE_DOMAIN' .env.local) && eval $(grep '^SHOPIFY_STOREFRONT_ACCESS_TOKEN' .env.local) && npx apollo service:download --endpoint=https://${SHOPIFY_STORE_DOMAIN}/api/2021-07/graphql.json ./services/downloaded/schema.json --header='X-Shopify-Storefront-Access-Token: '${SHOPIFY_STOREFRONT_ACCESS_TOKEN}''",
+    "codegen:generate-types": "npx apollo codegen:generate --localSchemaFile=./services/downloaded/schema.json --includes=services/**/*.ts --globalTypesFile=./services/globalTypes.ts --target=typescript"
   },
   "dependencies": {
     "@apollo/client": "^3.6.5",
     "@headlessui/react": "^1.6.4",
+    "graphql-config": "^4.3.1",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0"

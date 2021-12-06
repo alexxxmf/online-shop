@@ -6,24 +6,26 @@ import { Products as ProductsData } from "../services/queries/__generated__/Prod
 import styles from "../styles/Home.module.css";
 import { GetStaticProps } from "next";
 import { InferGetStaticPropsType, GetStaticPropsResult } from "next";
+import ProductList from "../components/ProductList";
 
 interface HomePageStaticProps {
   products: ProductsData;
 }
 
-const Home: NextPage = ({
+const Home: NextPage<HomePageStaticProps> = ({
   products,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  console.log("products", products);
-  return <div className="text-3xl">Test tailwind</div>;
+  return (
+    <div>
+      <ProductList productsData={products} />
+    </div>
+  );
 };
 
 export default Home;
 
-export const getStaticProps: GetStaticProps = async (): Promise<
-  GetStaticPropsResult<HomePageStaticProps>
-> => {
-  const response = await client.query({ query: PRODUCTS });
+export const getStaticProps: GetStaticProps<HomePageStaticProps> = async () => {
+  const response = await client.query<ProductsData>({ query: PRODUCTS });
 
   const { data } = response;
   return {
@@ -34,4 +36,4 @@ export const getStaticProps: GetStaticProps = async (): Promise<
 };
 
 // https://github.com/vercel/next.js/discussions/10946
-// https://stackoverflow.com/questions/65078245/how-to-make-next-js-getstaticprops-work-with-typescript
+// https://www.vitamindev.com/next-js/getstaticprops-getstaticpaths-typescript/

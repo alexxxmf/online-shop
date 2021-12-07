@@ -11,6 +11,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const { altText, originalSrc } = product.images.edges[0].node;
 
+  const price = product.priceRange.minVariantPrice.amount;
+
   return (
     <Link href={`/product/${handle}`}>
       <a className="group">
@@ -24,6 +26,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
             />
           </div>
         </div>
+        <h3 className="mt-4 text-lg font-medium text-gray-900">{title}</h3>
+        <p className="mt-1 text-sm text-gray-700">{price}</p>
       </a>
     </Link>
   );

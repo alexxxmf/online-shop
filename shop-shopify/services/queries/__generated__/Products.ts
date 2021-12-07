@@ -7,6 +7,22 @@
 // GraphQL query operation: Products
 // ====================================================
 
+export interface Products_collectionByHandle_products_edges_node_priceRange_minVariantPrice {
+  __typename: "MoneyV2";
+  /**
+   * Decimal money amount.
+   */
+  amount: any;
+}
+
+export interface Products_collectionByHandle_products_edges_node_priceRange {
+  __typename: "ProductPriceRange";
+  /**
+   * The lowest variant's price.
+   */
+  minVariantPrice: Products_collectionByHandle_products_edges_node_priceRange_minVariantPrice;
+}
+
 export interface Products_collectionByHandle_products_edges_node_images_edges_node {
   __typename: "Image";
   /**
@@ -52,6 +68,10 @@ export interface Products_collectionByHandle_products_edges_node {
    * They are used by the Liquid templating language to refer to objects.
    */
   handle: string;
+  /**
+   * The price range.
+   */
+  priceRange: Products_collectionByHandle_products_edges_node_priceRange;
   /**
    * List of images associated with the product.
    */

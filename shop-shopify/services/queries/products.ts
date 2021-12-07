@@ -10,6 +10,11 @@ export const PRODUCTS = gql`
             id
             title
             handle
+            priceRange {
+              minVariantPrice {
+                amount
+              }
+            }
             images(first: 5) {
               edges {
                 node {

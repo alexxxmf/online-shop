@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Products_collectionByHandle_products_edges_node } from "../services/queries/__generated__/Products";
+import { priceFormatter } from "../utils";
 
 interface ProductCardProps {
   product: Products_collectionByHandle_products_edges_node;
@@ -27,7 +28,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         </div>
         <h3 className="mt-4 text-lg font-medium text-gray-900">{title}</h3>
-        <p className="mt-1 text-sm text-gray-700">{price}</p>
+        <p className="mt-1 text-sm text-gray-700">
+          {priceFormatter.format(price)}
+        </p>
       </a>
     </Link>
   );

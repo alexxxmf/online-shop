@@ -17,7 +17,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Link href={`/product/${handle}`}>
       <a className="group">
-        <div className="w-full bg-gray-200 rounded-3xl overflow-hiden">
+        <div className="w-full bg-gray-200 rounded-sm overflow-hidden">
           <div className="relative group-hover:opacity-75 h-72">
             <Image
               src={originalSrc}

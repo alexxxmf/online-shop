@@ -29,3 +29,16 @@ export const PRODUCTS = gql`
     }
   }
 `;
+
+export const PRODUCTS_ALL = gql`
+  query ProductsAll {
+    products(first: 250) {
+      edges {
+        node {
+          id
+          handle
+        }
+      }
+    }
+  }
+`;

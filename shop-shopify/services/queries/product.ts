@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const PRODUCT = gql`
-  query ProductByHandle($handle: String) {
+  query ProductByHandle($handle: String!) {
     productByHandle(handle: $handle) {
       id
       title

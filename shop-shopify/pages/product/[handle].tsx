@@ -1,7 +1,7 @@
-import { GetStaticProps, GetStaticPropsContext } from "next";
+import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import { client } from "../../services";
-import { PRODUCTS_ALL } from "../../services/queries";
+import { PRODUCTS_ALL, PRODUCT } from "../../services/queries";
 import {
   ProductByHandle as ProductByHandleData,
   ProductByHandleVariables,
@@ -9,8 +9,16 @@ import {
 } from "../../services/queries/__generated__/ProductByHandle";
 import { ProductsAll as ProductsData } from "../../services/queries/__generated__/ProductsAll";
 
-const ProductPage = () => {
-  return <div>ProductPage</div>;
+interface Params extends ParsedUrlQuery {
+  handle: string;
+}
+
+interface ProductStaticProps {
+  product: Product | null;
+}
+
+const ProductPage: NextPage<ProductStaticProps> = ({ product }) => {
+  return <div>{product?.title}</div>;
 };
 
 export default ProductPage;
@@ -27,32 +35,24 @@ export const getStaticPaths = async () => {
     };
   });
 
-  console.log("paths", paths);
   return {
     paths,
     fallback: false,
   };
 };
 
-interface Params extends ParsedUrlQuery {
-  handle: string;
-}
-
-interface StaticProps {
-  product: Product | null;
-}
-
-export const getStaticProps: GetStaticProps<StaticProps, Params> = async ({
-  params,
-}) => {
-  params?.handle;
+export const getStaticProps: GetStaticProps<
+  ProductStaticProps,
+  Params
+> = async ({ params }) => {
   const response = await client.query<
     ProductByHandleData,
     ProductByHandleVariables
   >({
-    query: PRODUCTS_ALL,
+    query: PRODUCT,
     variables: { handle: params ? params.handle : "" },
   });
+
   const product = response.data.productByHandle;
 
   return {

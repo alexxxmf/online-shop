@@ -1,5 +1,6 @@
 import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
+import ProductPageContent from "../../components/ProductPageContent";
 import { client } from "../../services";
 import { PRODUCTS_ALL, PRODUCT } from "../../services/queries";
 import {
@@ -18,7 +19,7 @@ interface ProductStaticProps {
 }
 
 const ProductPage: NextPage<ProductStaticProps> = ({ product }) => {
-  return <div>{product?.title}</div>;
+  return <div>{product && <ProductPageContent product={product} />}</div>;
 };
 
 export default ProductPage;

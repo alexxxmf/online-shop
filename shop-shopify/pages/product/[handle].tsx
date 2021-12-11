@@ -19,7 +19,11 @@ interface ProductStaticProps {
 }
 
 const ProductPage: NextPage<ProductStaticProps> = ({ product }) => {
-  return <div>{product && <ProductPageContent product={product} />}</div>;
+  return (
+    <div className="min-h-screen py-12 sm:pt-20">
+      {product && <ProductPageContent product={product} />}
+    </div>
+  );
 };
 
 export default ProductPage;

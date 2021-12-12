@@ -20,6 +20,7 @@ export const PRODUCT = gql`
         values
         id
       }
+
       variants(first: 25) {
         edges {
           node {
@@ -34,6 +35,10 @@ export const PRODUCT = gql`
             title
             id
             price
+            product {
+              handle
+              title
+            }
           }
         }
       }

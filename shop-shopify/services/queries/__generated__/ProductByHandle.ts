@@ -79,6 +79,19 @@ export interface ProductByHandle_productByHandle_variants_edges_node_image {
   altText: string | null;
 }
 
+export interface ProductByHandle_productByHandle_variants_edges_node_product {
+  __typename: "Product";
+  /**
+   * A human-friendly unique string for the Product automatically generated from its title.
+   * They are used by the Liquid templating language to refer to objects.
+   */
+  handle: string;
+  /**
+   * The product’s title.
+   */
+  title: string;
+}
+
 export interface ProductByHandle_productByHandle_variants_edges_node {
   __typename: "ProductVariant";
   /**
@@ -101,6 +114,10 @@ export interface ProductByHandle_productByHandle_variants_edges_node {
    * The product variant’s price.
    */
   price: any;
+  /**
+   * The product object that the product variant belongs to.
+   */
+  product: ProductByHandle_productByHandle_variants_edges_node_product;
 }
 
 export interface ProductByHandle_productByHandle_variants_edges {
@@ -160,5 +177,5 @@ export interface ProductByHandle {
 }
 
 export interface ProductByHandleVariables {
-  handle?: string | null;
+  handle: string;
 }

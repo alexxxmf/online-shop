@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ProductByHandle_productByHandle as Product } from "../services/queries/__generated__/ProductByHandle";
+import ProductForm from "./ProductForm";
 
 interface ProductPageContentProps {
   product: Product;
@@ -18,6 +19,7 @@ const ProductPageContent = ({ product }: ProductPageContentProps) => {
           />
         </div>
       </div>
+      <ProductForm product={product} />
     </div>
   );
 };

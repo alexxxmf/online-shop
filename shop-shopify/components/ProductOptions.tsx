@@ -12,7 +12,7 @@ const ProductOptions = ({
   setOptions,
 }: ProductOptionsProps) => {
   return (
-    <fieldset>
+    <fieldset className="py-2">
       <legend className="text-xl font-semibold">{name}</legend>
       <div className="inline-flex item-center flex-wrap">
         {values.map((value) => {

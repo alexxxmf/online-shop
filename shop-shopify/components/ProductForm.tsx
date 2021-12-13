@@ -62,9 +62,11 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
           />
         );
       })}
-      <button className="bg-black rounded-lg text-white px-2 py-3 hover:bg-gray-800">
-        Add to Cart
-      </button>
+      <div className="py-3">
+        <button className="bg-black rounded-lg text-white px-2 py-3 hover:bg-gray-800 w-full">
+          Add to Cart
+        </button>
+      </div>
     </div>
   );
 };

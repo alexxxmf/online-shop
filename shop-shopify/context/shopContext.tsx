@@ -1,9 +1,14 @@
 import { createContext, useState, useEffect } from "react";
 import { CHECKOUT_CREATE, client } from "../services";
+import { CHECKOUT_UPDATE } from "../services/mutations/CheckoutUpdate";
 import {
   CheckoutCreate as CheckoutCreateData,
   CheckoutCreateVariables,
 } from "../services/mutations/__generated__/CheckoutCreate";
+import {
+  CheckoutUpdate as CheckoutUpdateData,
+  CheckoutUpdateVariables,
+} from "../services/mutations/__generated__/CheckoutUpdate";
 
 interface ShopProviderProps {
   children: React.ReactNode;
@@ -29,7 +34,7 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
       >({
         mutation: CHECKOUT_CREATE,
         variables: {
-          variantId: "",
+          variantId: newItem.variantId,
           quantity: 1,
         },
       });
@@ -51,10 +56,61 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
           "There was a problem adding the item to the cart. Please try later!"
         );
       }
+    } else {
+      let newCart = [...cart];
+
+      const indexOfNewItemFoundInCart = cart.findIndex(
+        ({ variantId }) => variantId === newItem.variantId
+      );
+      if (indexOfNewItemFoundInCart === -1) {
+        newCart.push({ variantId: newItem.variantId, quantity: 1 });
+      } else {
+        newCart[indexOfNewItemFoundInCart] = {
+          ...newCart[indexOfNewItemFoundInCart],
+          quantity: newCart[indexOfNewItemFoundInCart].quantity + 1,
+        };
+      }
+      setCart(newCart);
+
+      const response = await client.mutate<
+        CheckoutUpdateData,
+        CheckoutUpdateVariables
+      >({
+        mutation: CHECKOUT_UPDATE,
+        variables: {
+          lineItems: cart,
+          checkoutId,
+        },
+      });
+
+      if (response.data) {
+        const checkoutElement =
+          response.data.checkoutLineItemsReplace?.checkout ?? null;
+        checkoutElement &&
+          setCheckoutId(checkoutElement.id) &&
+          setCheckoutUrl(checkoutElement.webUrl);
+
+        // TODO: move this key to env or something more centralized
+        checkoutElement &&
+          localStorage.setItem(
+            "checkout_id",
+            JSON.stringify([newItem, checkoutElement])
+          );
+      } else if (response.errors) {
+        throw new Error(
+          "There was a problem adding the item to the cart. Please try later!"
+        );
+      }
     }
   };
 
-  return <div>shopContext</div>;
+  return (
+    <CartContext.Provider
+      value={{ cart, cartOpen, setCartOpen, addToCart, checkoutUrl }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };
 
 export default ShopProvider;

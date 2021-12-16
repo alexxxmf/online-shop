@@ -44,6 +44,17 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
     setSelectedOptions((prevState) => {
       return { ...prevState, [name]: value };
     });
+
+    const selection = {
+      ...selectedOptions,
+      [name]: value,
+    };
+
+    allVariantOptions.map((item) => {
+      if (JSON.stringify(item.options) === JSON.stringify(selection)) {
+        setSelectedVariant(item);
+      }
+    });
   };
 
   return (

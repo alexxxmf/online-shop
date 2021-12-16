@@ -63,7 +63,7 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
         checkoutElement &&
           localStorage.setItem(
             "checkout_id",
-            JSON.stringify([newItem, checkoutElement])
+            JSON.stringify([[newItem], checkoutElement.id])
           );
       } else if (response.errors) {
         throw new Error(
@@ -108,7 +108,7 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
         checkoutElement &&
           localStorage.setItem(
             "checkout_id",
-            JSON.stringify([newItem, checkoutElement])
+            JSON.stringify([newCart, checkoutElement.id])
           );
       } else if (response.errors) {
         throw new Error(

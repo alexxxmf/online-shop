@@ -38,5 +38,5 @@ export interface CheckoutUpdate {
 
 export interface CheckoutUpdateVariables {
   lineItems: CheckoutLineItemInput[];
-  checkoutId?: string | null;
+  checkoutId: string;
 }

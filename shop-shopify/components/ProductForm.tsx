@@ -41,7 +41,6 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
   const [selectedOptions, setSelectedOptions] = useState(defaultValues);
 
   const setOptions = (name: string, value: string) => {
-    console.log({ name, value });
     setSelectedOptions((prevState) => {
       return { ...prevState, [name]: value };
     });

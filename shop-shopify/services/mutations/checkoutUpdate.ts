@@ -5,7 +5,7 @@ import { gql } from "@apollo/client";
 export const CHECKOUT_UPDATE = gql`
   mutation CheckoutUpdate(
     $lineItems: [CheckoutLineItemInput!]!
-    $checkoutId: String
+    $checkoutId: ID!
   ) {
     checkoutLineItemsReplace(lineItems: $lineItems, checkoutId: $checkoutId) {
       checkout {

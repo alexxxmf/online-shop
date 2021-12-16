@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CartContext } from "../context/shopContext";
 import { ProductByHandle_productByHandle as Product } from "../services/queries/__generated__/ProductByHandle";
 import { priceFormatter } from "../utils";
 import ProductOptions from "./ProductOptions";
@@ -8,10 +9,10 @@ interface ProductPageContentProps {
 }
 
 const ProductForm = ({ product }: ProductPageContentProps) => {
+  const cartContext = useContext(CartContext);
+
   const allVariantOptions = product.variants.edges?.map((variant) => {
     const allOptions: { [key: string]: any } = {};
-
-    console.log("product", product);
 
     variant.node.selectedOptions.map((item) => {
       const name = item.name;
@@ -40,6 +41,7 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
   const [selectedOptions, setSelectedOptions] = useState(defaultValues);
 
   const setOptions = (name: string, value: string) => {
+    console.log({ name, value });
     setSelectedOptions((prevState) => {
       return { ...prevState, [name]: value };
     });
@@ -63,7 +65,15 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
         );
       })}
       <div className="py-3">
-        <button className="bg-black rounded-lg text-white px-2 py-3 hover:bg-gray-800 w-full">
+        <button
+          onClick={async () => {
+            await cartContext?.addToCart({
+              quantity: 1,
+              variantId: selectedVariant.id,
+            });
+          }}
+          className="bg-black rounded-lg text-white px-2 py-3 hover:bg-gray-800 w-full"
+        >
           Add to Cart
         </button>
       </div>

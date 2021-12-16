@@ -1,4 +1,10 @@
-import { createContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import { CHECKOUT_CREATE, client } from "../services";
 import { CHECKOUT_UPDATE } from "../services/mutations/CheckoutUpdate";
 import {
@@ -16,7 +22,15 @@ interface ShopProviderProps {
 
 interface CartItem extends CheckoutCreateVariables {}
 
-const CartContext = createContext({});
+interface CartContext {
+  cart: CartItem[];
+  cartOpen: boolean;
+  setCartOpen: Dispatch<SetStateAction<boolean>>;
+  addToCart: (newItem: CartItem) => Promise<void>;
+  checkoutUrl: string;
+}
+
+export const CartContext = createContext<CartContext | null>(null);
 
 const ShopProvider = ({ children }: ShopProviderProps) => {
   const [cart, setCart] = useState<CartItem[]>([]);

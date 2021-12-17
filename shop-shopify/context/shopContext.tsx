@@ -14,6 +14,7 @@ import {
 import {
   CheckoutUpdate as CheckoutUpdateData,
   CheckoutUpdateVariables,
+  CheckoutUpdate_checkoutLineItemsReplace_checkout as CheckoutElement,
 } from "../services/mutations/__generated__/CheckoutUpdate";
 
 interface ShopProviderProps {
@@ -37,6 +38,17 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutId, setCheckoutId] = useState("");
   const [checkoutUrl, setCheckoutUrl] = useState("");
+
+  useEffect(() => {
+    const stringifiedCart = localStorage.getItem("checkout_id");
+    if (stringifiedCart) {
+      const cartObject: [CartItem[], CheckoutElement] =
+        JSON.parse(stringifiedCart);
+      setCart(cartObject[0]);
+      setCheckoutId(cartObject[1].id);
+      setCheckoutUrl(cartObject[1].webUrl);
+    }
+  }, []);
 
   const addToCart = async (newItem: CartItem) => {
     if (cart.length === 0) {
@@ -63,7 +75,7 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
         checkoutElement &&
           localStorage.setItem(
             "checkout_id",
-            JSON.stringify([[newItem], checkoutElement.id])
+            JSON.stringify([[newItem], checkoutElement])
           );
       } else if (response.errors) {
         throw new Error(
@@ -108,7 +120,7 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
         checkoutElement &&
           localStorage.setItem(
             "checkout_id",
-            JSON.stringify([newCart, checkoutElement.id])
+            JSON.stringify([newCart, checkoutElement])
           );
       } else if (response.errors) {
         throw new Error(

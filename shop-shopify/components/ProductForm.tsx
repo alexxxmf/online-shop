@@ -8,6 +8,18 @@ interface ProductPageContentProps {
   product: Product;
 }
 
+export interface CartItem {
+  id: string;
+  handle: string;
+  image: string;
+  options: {
+    [key: string]: any;
+  };
+  variantTitle: string;
+  variantPrice: any;
+  variantQuantity: number;
+}
+
 const ProductForm = ({ product }: ProductPageContentProps) => {
   const cartContext = useContext(CartContext);
 
@@ -77,10 +89,7 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
       <div className="py-3">
         <button
           onClick={async () => {
-            await cartContext?.addToCart({
-              quantity: 1,
-              variantId: selectedVariant.id,
-            });
+            await cartContext?.addToCart(selectedVariant);
           }}
           className="bg-black rounded-lg text-white px-2 py-3 hover:bg-gray-800 w-full"
         >

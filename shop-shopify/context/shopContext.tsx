@@ -5,6 +5,7 @@ import {
   SetStateAction,
   Dispatch,
 } from "react";
+import { CartItem } from "../components/ProductForm";
 import { CHECKOUT_CREATE, client } from "../services";
 import { CHECKOUT_UPDATE } from "../services/mutations/CheckoutUpdate";
 import {
@@ -20,8 +21,6 @@ import {
 interface ShopProviderProps {
   children: React.ReactNode;
 }
-
-interface CartItem extends CheckoutCreateVariables {}
 
 interface CartContext {
   cart: CartItem[];
@@ -60,7 +59,7 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
       >({
         mutation: CHECKOUT_CREATE,
         variables: {
-          variantId: newItem.variantId,
+          variantId: newItem.id,
           quantity: 1,
         },
       });
@@ -86,14 +85,15 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
       let newCart = [...cart];
 
       const indexOfNewItemFoundInCart = cart.findIndex(
-        ({ variantId }) => variantId === newItem.variantId
+        ({ id }) => id === newItem.id
       );
       if (indexOfNewItemFoundInCart === -1) {
-        newCart.push({ variantId: newItem.variantId, quantity: 1 });
+        newCart.push(newItem);
       } else {
         newCart[indexOfNewItemFoundInCart] = {
           ...newCart[indexOfNewItemFoundInCart],
-          quantity: newCart[indexOfNewItemFoundInCart].quantity + 1,
+          variantQuantity:
+            newCart[indexOfNewItemFoundInCart].variantQuantity + 1,
         };
       }
       setCart(newCart);
@@ -104,7 +104,12 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
       >({
         mutation: CHECKOUT_UPDATE,
         variables: {
-          lineItems: cart,
+          lineItems: newCart.map((item) => {
+            return {
+              variantId: item.id,
+              quantity: item.variantQuantity,
+            };
+          }),
           checkoutId,
         },
       });

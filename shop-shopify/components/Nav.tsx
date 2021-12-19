@@ -16,7 +16,6 @@ const Nav = () => {
     cartQuantity += cartItem.variantQuantity;
   });
 
-  console.log("cartOpen", cartOpen);
   return (
     <header className="border-b sticky top-0 z-20 bg-white">
       <div className="flex items-center justify-between max-w-6xl pt-4 pb-2 px-4 mx-auto lg:max-w-screen-xl">

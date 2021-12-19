@@ -1,21 +1,30 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
+import { XIcon } from "@heroicons/react/outline";
 import { CartContext } from "../context";
+import { priceFormatter } from "../utils";
 
 const MiniCart = () => {
+  const cancelButtonRef = useRef(null);
   const cartContext = useContext(CartContext);
 
   const cartProducts = cartContext?.cart;
   const open = cartContext?.cartOpen ?? false;
   const setOpen = cartContext?.setCartOpen;
 
+  let cartTotal = 0;
+  cartProducts?.forEach((item) => {
+    cartTotal += item?.variantPrice * item?.variantQuantity;
+  });
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
+        initialFocus={cancelButtonRef}
         as="div"
-        className="relative z-10"
+        className="fixed z-50 inset-0 overflow-hidden"
         onClose={() => {
           !!setOpen && setOpen(false);
         }}
@@ -55,12 +64,14 @@ const MiniCart = () => {
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
+                            ref={cancelButtonRef}
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
                             onClick={() => {
                               !!setOpen && setOpen(false);
                             }}
                           >
                             <span className="sr-only">Close panel</span>
+                            <XIcon className="h-6 w-6" aria-hidden="true" />
                           </button>
                         </div>
                       </div>
@@ -74,33 +85,41 @@ const MiniCart = () => {
                             {cartProducts &&
                               cartProducts.map((cartItem) => (
                                 <li key={cartItem.id} className="flex py-6">
-                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    {/* <Image
-                                    src={product.imageSrc}
-                                    alt={product.imageAlt}
-                                    className="h-full w-full object-cover object-center"
-                                  /> */}
+                                  <div className="relative flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                                    <Image
+                                      src={cartItem.image}
+                                      alt={cartItem.variantTitle}
+                                      layout="fill"
+                                      objectFit="cover"
+                                    />
                                   </div>
 
                                   <div className="ml-4 flex flex-1 flex-col">
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          {/* <a href={product.href}>
-                                          {" "}
-                                          {product.name}{" "}
-                                        </a> */}
+                                          {/* TODO: get the HREF */}
+                                          <a
+                                            href={`product/${cartItem.handle}`}
+                                          >
+                                            {" "}
+                                            {cartItem.title}{" "}
+                                          </a>
                                         </h3>
-                                        {/* <p className="ml-4">{product.price}</p> */}
+                                        <p className="ml-4">
+                                          {priceFormatter.format(
+                                            cartItem.variantPrice
+                                          )}
+                                        </p>
                                       </div>
-                                      {/* <p className="mt-1 text-sm text-gray-500">
-                                        {product.color}
-                                      </p> */}
+                                      <p className="mt-1 text-sm text-gray-500">
+                                        {cartItem.variantTitle}
+                                      </p>
                                     </div>
                                     <div className="flex flex-1 items-end justify-between text-sm">
-                                      {/* <p className="text-gray-500">
-                                        Qty {product.quantity}
-                                      </p> */}
+                                      <p className="text-gray-500">
+                                        Qty {cartItem.variantQuantity}
+                                      </p>
 
                                       <div className="flex">
                                         <button
@@ -118,39 +137,40 @@ const MiniCart = () => {
                         </div>
                       </div>
                     </div>
-
-                    <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                      <div className="flex justify-between text-base font-medium text-gray-900">
-                        <p>Subtotal</p>
-                        <p>$262.00</p>
-                      </div>
-                      <p className="mt-0.5 text-sm text-gray-500">
-                        Shipping and taxes calculated at checkout.
-                      </p>
-                      <div className="mt-6">
-                        <a
-                          href="#"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                        >
-                          Checkout
-                        </a>
-                      </div>
-                      <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                        <p>
-                          or{" "}
-                          <button
-                            type="button"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => {
-                              !!setOpen && setOpen(false);
-                            }}
-                          >
-                            Continue Shopping
-                            <span aria-hidden="true"> &rarr;</span>
-                          </button>
+                    {cartProducts && (
+                      <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                        <div className="flex justify-between text-base font-medium text-gray-900">
+                          <p>Subtotal</p>
+                          <p>{priceFormatter.format(cartTotal)}</p>
+                        </div>
+                        <p className="mt-0.5 text-sm text-gray-500">
+                          Shipping and taxes calculated at checkout.
                         </p>
+                        <div className="mt-6">
+                          <a
+                            href="#"
+                            className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                          >
+                            Checkout
+                          </a>
+                        </div>
+                        <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
+                          <p>
+                            or{" "}
+                            <button
+                              type="button"
+                              className="font-medium text-indigo-600 hover:text-indigo-500"
+                              onClick={() => {
+                                !!setOpen && setOpen(false);
+                              }}
+                            >
+                              Continue Shopping
+                              <span aria-hidden="true"> &rarr;</span>
+                            </button>
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

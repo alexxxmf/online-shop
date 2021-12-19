@@ -18,6 +18,7 @@ export interface CartItem {
   variantTitle: string;
   variantPrice: any;
   variantQuantity: number;
+  title: string;
 }
 
 const ProductForm = ({ product }: ProductPageContentProps) => {
@@ -33,7 +34,7 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
 
     return {
       id: variant.node.id,
-      // title: variant.node.product.title,
+      title: variant.node.product.title,
       handle: variant.node.product.handle,
       image: variant.node.image?.originalSrc,
       options: allOptions,

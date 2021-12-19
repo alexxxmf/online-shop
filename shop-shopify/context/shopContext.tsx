@@ -27,6 +27,7 @@ interface CartContext {
   cartOpen: boolean;
   setCartOpen: Dispatch<SetStateAction<boolean>>;
   addToCart: (newItem: CartItem) => Promise<void>;
+  removeCartItem: (itemToRemove: CartItem) => Promise<void>;
   checkoutUrl: string;
 }
 
@@ -50,6 +51,7 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
   }, []);
 
   const addToCart = async (newItem: CartItem) => {
+    setCartOpen(true);
     if (cart.length === 0) {
       setCart([newItem]);
 
@@ -135,9 +137,61 @@ const ShopProvider = ({ children }: ShopProviderProps) => {
     }
   };
 
+  const removeCartItem = async (itemToRemove: CartItem) => {
+    const newCart = cart.filter(({ id }) => {
+      return id !== itemToRemove.id;
+    });
+
+    !newCart.length && setCartOpen(false);
+
+    setCart(newCart);
+
+    const response = await client.mutate<
+      CheckoutUpdateData,
+      CheckoutUpdateVariables
+    >({
+      mutation: CHECKOUT_UPDATE,
+      variables: {
+        lineItems: newCart.map((item) => {
+          return {
+            variantId: item.id,
+            quantity: item.variantQuantity,
+          };
+        }),
+        checkoutId,
+      },
+    });
+
+    if (response.data) {
+      const checkoutElement =
+        response.data.checkoutLineItemsReplace?.checkout ?? null;
+      checkoutElement &&
+        setCheckoutId(checkoutElement.id) &&
+        setCheckoutUrl(checkoutElement.webUrl);
+
+      // TODO: move this key to env or something more centralized
+      checkoutElement &&
+        localStorage.setItem(
+          "checkout_id",
+          JSON.stringify([newCart, checkoutElement])
+        );
+    } else if (response.errors) {
+      throw new Error(
+        "There was a problem adding the item to the cart. Please try later!"
+      );
+    }
+  };
+
   return (
     <CartContext.Provider
-      value={{ cart, cartOpen, setCartOpen, addToCart, checkoutUrl }}
+      value={{
+        cart,
+        cartOpen,
+        setCartOpen,
+        addToCart,
+        checkoutUrl,
+        removeCartItem,
+      }}
     >
       {children}
     </CartContext.Provider>

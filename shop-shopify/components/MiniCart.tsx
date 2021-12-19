@@ -13,6 +13,7 @@ const MiniCart = () => {
   const cartProducts = cartContext?.cart;
   const open = cartContext?.cartOpen ?? false;
   const setOpen = cartContext?.setCartOpen;
+  const removeCartItem = cartContext?.removeCartItem;
 
   let cartTotal = 0;
   cartProducts?.forEach((item) => {
@@ -98,9 +99,8 @@ const MiniCart = () => {
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          {/* TODO: get the HREF */}
                                           <a
-                                            href={`product/${cartItem.handle}`}
+                                            href={`/product/${cartItem.handle}`}
                                           >
                                             {" "}
                                             {cartItem.title}{" "}
@@ -123,6 +123,10 @@ const MiniCart = () => {
 
                                       <div className="flex">
                                         <button
+                                          onClick={async () => {
+                                            removeCartItem &&
+                                              (await removeCartItem(cartItem));
+                                          }}
                                           type="button"
                                           className="font-medium text-indigo-600 hover:text-indigo-500"
                                         >

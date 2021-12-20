@@ -5,6 +5,7 @@ import Image from "next/image";
 import { XIcon } from "@heroicons/react/outline";
 import { CartContext } from "../context";
 import { priceFormatter } from "../utils";
+import Link from "next/link";
 
 const MiniCart = () => {
   const cancelButtonRef = useRef(null);
@@ -83,7 +84,7 @@ const MiniCart = () => {
                             role="list"
                             className="-my-6 divide-y divide-gray-200"
                           >
-                            {cartProducts &&
+                            {cartProducts?.length ? (
                               cartProducts.map((cartItem) => (
                                 <li key={cartItem.id} className="flex py-6">
                                   <div className="relative flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
@@ -99,12 +100,19 @@ const MiniCart = () => {
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
-                                          <a
+                                          <Link
+                                            passHref
                                             href={`/product/${cartItem.handle}`}
                                           >
-                                            {" "}
-                                            {cartItem.title}{" "}
-                                          </a>
+                                            <a
+                                              onClick={() =>
+                                                !!setOpen && setOpen(false)
+                                              }
+                                            >
+                                              {" "}
+                                              {cartItem.title}{" "}
+                                            </a>
+                                          </Link>
                                         </h3>
                                         <p className="ml-4">
                                           {priceFormatter.format(
@@ -136,45 +144,53 @@ const MiniCart = () => {
                                     </div>
                                   </div>
                                 </li>
-                              ))}
+                              ))
+                            ) : (
+                              <div>
+                                <p>Nothing in your cart!</p>
+                              </div>
+                            )}
                           </ul>
                         </div>
                       </div>
                     </div>
-                    {cartProducts && (
+
+                    {cartProducts?.length ? (
                       <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                        <div className="flex justify-between text-base font-medium text-gray-900">
-                          <p>Subtotal</p>
-                          <p>{priceFormatter.format(cartTotal)}</p>
-                        </div>
-                        <p className="mt-0.5 text-sm text-gray-500">
-                          Shipping and taxes calculated at checkout.
-                        </p>
-                        <div className="mt-6">
-                          <a
-                            href="#"
-                            className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                          >
-                            Checkout
-                          </a>
-                        </div>
-                        <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                          <p>
-                            or{" "}
-                            <button
-                              type="button"
-                              className="font-medium text-indigo-600 hover:text-indigo-500"
-                              onClick={() => {
-                                !!setOpen && setOpen(false);
-                              }}
-                            >
-                              Continue Shopping
-                              <span aria-hidden="true"> &rarr;</span>
-                            </button>
+                        <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                          <div className="flex justify-between text-base font-medium text-gray-900">
+                            <p>Subtotal</p>
+                            <p>{priceFormatter.format(cartTotal)}</p>
+                          </div>
+                          <p className="mt-0.5 text-sm text-gray-500">
+                            Shipping and taxes calculated at checkout.
                           </p>
+                          <div className="mt-6">
+                            <a
+                              href="#"
+                              className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                            >
+                              Checkout
+                            </a>
+                          </div>
+                          <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
+                            <p>
+                              or{" "}
+                              <button
+                                type="button"
+                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                                onClick={() => {
+                                  !!setOpen && setOpen(false);
+                                }}
+                              >
+                                Continue Shopping
+                                <span aria-hidden="true"> &rarr;</span>
+                              </button>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

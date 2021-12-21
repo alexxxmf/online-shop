@@ -1,11 +1,9 @@
-import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { client } from "../services";
 import { PRODUCTS } from "../services/queries";
 import { Products as ProductsData } from "../services/queries/__generated__/Products";
-import styles from "../styles/Home.module.css";
 import { GetStaticProps } from "next";
-import { InferGetStaticPropsType, GetStaticPropsResult } from "next";
+import { InferGetStaticPropsType } from "next";
 import ProductList from "../components/ProductList";
 
 interface HomePageStaticProps {

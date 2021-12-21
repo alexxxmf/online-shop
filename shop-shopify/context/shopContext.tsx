@@ -7,7 +7,7 @@ import {
 } from "react";
 import { CartItem } from "../components/ProductForm";
 import { CHECKOUT_CREATE, client } from "../services";
-import { CHECKOUT_UPDATE } from "../services/mutations/CheckoutUpdate";
+import { CHECKOUT_UPDATE } from "../services/mutations/checkoutUpdate";
 import {
   CheckoutCreate as CheckoutCreateData,
   CheckoutCreateVariables,

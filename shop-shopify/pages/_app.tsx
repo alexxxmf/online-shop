@@ -5,6 +5,9 @@ import { client } from "../services";
 import Layout from "../components/Layout";
 import ShopProvider from "../context/shopContext";
 import { useRouter } from "next/router";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();

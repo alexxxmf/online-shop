@@ -1,3 +1,4 @@
+import Footer from "./Footer";
 import Nav from "./Nav";
 
 interface LayoutProps {
@@ -9,6 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex flex-col justify-between min-h-screen">
       <Nav />
       <main>{children}</main>
+      <Footer />
     </div>
   );
 };

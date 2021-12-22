@@ -5,6 +5,7 @@ import { Products as ProductsData } from "../services/queries/__generated__/Prod
 import { GetStaticProps } from "next";
 import { InferGetStaticPropsType } from "next";
 import ProductList from "../components/ProductList";
+import Hero from "../components/Hero";
 
 interface HomePageStaticProps {
   products: ProductsData;
@@ -15,6 +16,7 @@ const Home: NextPage<HomePageStaticProps> = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <div>
+      <Hero />
       <ProductList productsData={products} />
     </div>
   );

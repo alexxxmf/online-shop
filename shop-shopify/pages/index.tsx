@@ -6,6 +6,7 @@ import { GetStaticProps } from "next";
 import { InferGetStaticPropsType } from "next";
 import ProductList from "../components/ProductList";
 import Hero from "../components/Hero";
+import Head from "next/head";
 
 interface HomePageStaticProps {
   products: ProductsData;
@@ -16,6 +17,24 @@ const Home: NextPage<HomePageStaticProps> = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <div>
+      <Head>
+        <title>Super Shop</title>
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta
+          httpEquiv="Content-Type"
+          content="text/html; charset=ISO-8859-1"
+        />
+        <meta name="description" content="Shop with the latest trends" />
+        <meta property="og:title" content="Super Shop" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.supershop.com" />
+        <meta
+          property="og:image"
+          content="https://www.supershop.co/share.png"
+        />
+        <meta property="og:description" content="Shop with the latest trends" />
+        <meta property="og:site_name" content="Super Shop" />
+      </Head>
       <Hero />
       <ProductList productsData={products} />
     </div>

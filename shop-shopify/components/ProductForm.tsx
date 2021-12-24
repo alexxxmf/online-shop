@@ -1,4 +1,6 @@
 import { useContext, useState } from "react";
+import useSWR from "swr";
+import axios from "axios";
 import { CartContext } from "../context/shopContext";
 import { ProductByHandle_productByHandle as Product } from "../services/queries/__generated__/ProductByHandle";
 import { priceFormatter } from "../utils";
@@ -21,8 +23,25 @@ export interface CartItem {
   title: string;
 }
 
+const inventoryFetcher = (url: string, handle: string) =>
+  axios
+    .get(url, {
+      params: {
+        handle,
+      },
+    })
+    .then((res) => res.data);
+
 const ProductForm = ({ product }: ProductPageContentProps) => {
   const cartContext = useContext(CartContext);
+
+  const { data: productInventory } = useSWR(
+    ["/api/available", product.handle],
+    (url, handle) => inventoryFetcher(url, handle),
+    { errorRetryCount: 3 }
+  );
+
+  console.log("productInventory", productInventory);
 
   const allVariantOptions = product.variants.edges?.map((variant) => {
     const allOptions: { [key: string]: any } = {};

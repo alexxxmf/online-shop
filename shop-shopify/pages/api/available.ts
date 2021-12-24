@@ -6,17 +6,27 @@ import {
   ProductVariantAvailabilityVariables,
 } from "../../services/queries/__generated__/ProductVariantAvailability";
 
-type Data = {
-  availableForSale: boolean;
-};
-
-export default function handler(
+const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  client.query<
+  res: NextApiResponse<ProductVariantAvailabilityData>
+) => {
+  const {
+    query: { handle },
+  } = req;
+
+  const response = await client.query<
     ProductVariantAvailabilityData,
     ProductVariantAvailabilityVariables
-  >({ query: PRODUCT_VARIANT_AVAILABILITY });
-  res.status(200).json({ availableForSale: false });
-}
+  >({
+    query: PRODUCT_VARIANT_AVAILABILITY,
+    variables: { handle: handle as string },
+  });
+
+  if (response.data) {
+    return res.json(response.data);
+  } else {
+    throw new Error("Products not fetched");
+  }
+};
+
+export default handler;

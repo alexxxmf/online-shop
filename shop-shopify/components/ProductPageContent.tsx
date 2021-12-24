@@ -9,7 +9,6 @@ interface ProductPageContentProps {
 }
 
 const ProductPageContent = ({ product }: ProductPageContentProps) => {
-  console.log("product", product);
   const images = product.images.edges.map((image, index) => {
     return (
       <SwiperSlide key={`slide-${index}`}>

@@ -20,6 +20,7 @@ const handler = async (
   >({
     query: PRODUCT_VARIANT_AVAILABILITY,
     variables: { handle: handle as string },
+    // IMPORTANT
     // This is important as we need to avoid cache when checking quantities that could rapidly change
     // better to rely primarily on the network
     fetchPolicy: "network-only",

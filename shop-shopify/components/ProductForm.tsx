@@ -86,8 +86,6 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
     }
   }, [productInventory, selectedVariant.id]);
 
-  console.log("available", available);
-
   const setOptions = (name: string, value: string) => {
     setSelectedOptions((prevState) => {
       return { ...prevState, [name]: value };
@@ -123,14 +121,20 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
         );
       })}
       <div className="py-3">
-        <button
-          onClick={async () => {
-            await cartContext?.addToCart(selectedVariant);
-          }}
-          className="bg-black rounded-lg text-white px-2 py-3 hover:bg-gray-800 w-full"
-        >
-          Add to Cart
-        </button>
+        {available ? (
+          <button
+            onClick={async () => {
+              await cartContext?.addToCart(selectedVariant);
+            }}
+            className="bg-black rounded-lg text-white px-2 py-3 hover:bg-gray-800 w-full"
+          >
+            Add to Cart
+          </button>
+        ) : (
+          <button className="rounded-lg text-white px-2 py-3 bg-red-800 cursor-not-allowed w-full">
+            Sold out!
+          </button>
+        )}
       </div>
     </div>
   );

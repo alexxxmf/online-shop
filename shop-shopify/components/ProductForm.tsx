@@ -1,10 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import axios from "axios";
 import { CartContext } from "../context/shopContext";
 import { ProductByHandle_productByHandle as Product } from "../services/queries/__generated__/ProductByHandle";
 import { priceFormatter } from "../utils";
 import ProductOptions from "./ProductOptions";
+import { ProductVariantAvailability as ProductVariantAvailabilityData } from "../services/queries/__generated__/ProductVariantAvailability";
 
 interface ProductPageContentProps {
   product: Product;
@@ -30,18 +31,17 @@ const inventoryFetcher = (url: string, handle: string) =>
         handle,
       },
     })
-    .then((res) => res.data);
+    .then((res) => res.data as ProductVariantAvailabilityData);
 
 const ProductForm = ({ product }: ProductPageContentProps) => {
   const cartContext = useContext(CartContext);
+  const [available, setAvailable] = useState(true);
 
   const { data: productInventory } = useSWR(
     ["/api/available", product.handle],
     (url, handle) => inventoryFetcher(url, handle),
     { errorRetryCount: 3 }
   );
-
-  console.log("productInventory", productInventory);
 
   const allVariantOptions = product.variants.edges?.map((variant) => {
     const allOptions: { [key: string]: any } = {};
@@ -71,6 +71,22 @@ const ProductForm = ({ product }: ProductPageContentProps) => {
 
   const [selectedVariant, setSelectedVariant] = useState(allVariantOptions[0]);
   const [selectedOptions, setSelectedOptions] = useState(defaultValues);
+
+  useEffect(() => {
+    if (productInventory) {
+      const checkAvailable =
+        productInventory.productByHandle?.variants.edges.find(
+          (item) => item.node.id === selectedVariant.id
+        );
+      if (checkAvailable?.node.availableForSale) {
+        setAvailable(true);
+      } else {
+        setAvailable(false);
+      }
+    }
+  }, [productInventory, selectedVariant.id]);
+
+  console.log("available", available);
 
   const setOptions = (name: string, value: string) => {
     setSelectedOptions((prevState) => {
